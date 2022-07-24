@@ -3,6 +3,7 @@ package com.leedong.covid.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leedong.covid.model.News;
+import com.leedong.covid.service.NewsService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,12 @@ public class NewsController {
 @Autowired(required = false)
 private ObjectMapper objectMapper;
 
+@Autowired
+private NewsService newsService;
+
 
     @GetMapping("/news")
-    public List<String> updateNews() throws JsonProcessingException {
+    public List<News> updateNews() throws JsonProcessingException {
         String url = "https://www.hpa.gov.tw/wf/newsapi.ashx?fbclid=IwAR11w4I_brMYrgl7iAummGlQV8hKxvdf3NWmUWlp0Cadyy2DHAnPaST6DxM";
        // String url = "http://localhost:8082/ch";
         RestTemplate restTemplate =new RestTemplate();
@@ -39,25 +43,9 @@ private ObjectMapper objectMapper;
                 request,
                 String.class
         );
-        String result = response.getBody().toString();
+        List<News> newsList = newsService.transfer(response);
 
-
-        News news = new News();
-
-        List<String> json = new ArrayList<>();
-
-
-        JSONArray jsonArray = new JSONArray(result);
-        for (int i = 0; i<jsonArray.length(); i++){
-
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String title = jsonObject.getString("標題");
-
-            news.setTitle(title);
-            json.add(objectMapper.writeValueAsString(news));
-
-        }
-        return json;
+        return newsList;
 
 
 

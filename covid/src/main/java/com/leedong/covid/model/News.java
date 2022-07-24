@@ -9,15 +9,15 @@ public class News {
 
     private String title;
 
-   // private String content;
+    private String content;
 
-//    private String connectionUrl;
+    private String connectionUrl;
 //    @JsonProperty("附加檔案")
-//    private Data data;
+    private Data data;
 //    @JsonProperty("發布日期")
-//    private Date createdDate;
+    private Date createdDate;
 //    @JsonProperty("修改日期")
-//    private Date modifiedDate;
+    private Date modifiedDate;
 
 
 
