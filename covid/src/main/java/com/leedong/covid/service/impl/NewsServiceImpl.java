@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ public class NewsServiceImpl implements NewsService {
         String result = response.getBody().toString();
 
         List<News> newsList = new ArrayList<>();
+
 //      把object轉乘String
 //      String json = new String();
 
@@ -36,11 +36,18 @@ public class NewsServiceImpl implements NewsService {
             News news = new News();
 
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String title = jsonObject.getString("標題");
-            news.setTitle(title);
+
+            news.setTitle(jsonObject.getString("標題"));
+            news.setContent(jsonObject.getString("內容"));
+            news.setDataList(jsonObject.getJSONArray("附加檔案"));
+            news.setConnectionUrl(jsonObject.getString("連結網址"));
+            news.setCreatedDate(jsonObject.getString("發布日期"));
+            news.setModifiedDate(jsonObject.getString("修改日期"));
             newsList.add(news);
-     //       json += objectMapper.writeValueAsString(news);
+//            json += objectMapper.writeValueAsString(news);
+
         }
+
 
         return newsList;
     }

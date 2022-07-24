@@ -7,9 +7,8 @@ import com.leedong.covid.service.NewsService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -34,13 +33,22 @@ private NewsService newsService;
     public List<News> updateNews() throws JsonProcessingException {
         String url = "https://www.hpa.gov.tw/wf/newsapi.ashx?fbclid=IwAR11w4I_brMYrgl7iAummGlQV8hKxvdf3NWmUWlp0Cadyy2DHAnPaST6DxM";
        // String url = "http://localhost:8082/ch";
+
         RestTemplate restTemplate =new RestTemplate();
-        RequestEntity request = RequestEntity.get(URI.create(url))
-                                             .accept(MediaType.APPLICATION_JSON)
-                                             .build();
+
+        //使用方法和header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity httpEntity = new HttpEntity(headers);
+
+        //搜尋條件
+        url +="&keyword=戒菸";
 
         ResponseEntity<String>response = restTemplate.exchange(
-                request,
+                url,
+                HttpMethod.GET,
+                httpEntity,
                 String.class
         );
         List<News> newsList = newsService.transfer(response);
