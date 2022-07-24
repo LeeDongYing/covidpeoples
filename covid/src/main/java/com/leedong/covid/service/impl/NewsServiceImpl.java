@@ -34,7 +34,7 @@ public class NewsServiceImpl implements NewsService {
         JSONArray jsonArray = new JSONArray(result);
         for (int i = 0; i < jsonArray.length(); i++) {
             News news = new News();
-            
+
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             String title = jsonObject.getString("標題");
             news.setTitle(title);
