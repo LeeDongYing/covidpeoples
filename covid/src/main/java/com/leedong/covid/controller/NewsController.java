@@ -4,22 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leedong.covid.model.News;
 import com.leedong.covid.service.NewsService;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
+
 public class NewsController {
 
 @Autowired(required = false)
@@ -30,9 +24,8 @@ private NewsService newsService;
 
 
     @GetMapping("/news")
-    public List<News> updateNews() throws JsonProcessingException {
+    public List<News> getAllNews() throws JsonProcessingException {
         String url = "https://www.hpa.gov.tw/wf/newsapi.ashx?fbclid=IwAR11w4I_brMYrgl7iAummGlQV8hKxvdf3NWmUWlp0Cadyy2DHAnPaST6DxM";
-       // String url = "http://localhost:8082/ch";
 
         RestTemplate restTemplate =new RestTemplate();
 
@@ -43,7 +36,11 @@ private NewsService newsService;
         HttpEntity httpEntity = new HttpEntity(headers);
 
         //搜尋條件
-        url +="&keyword=戒菸";
+        //keyword：標題關鍵字
+        //startdate：發布日期起始時間
+        //enddate：發布日期結束時間
+        url +="&startdate=2022/07/10";
+
 
         ResponseEntity<String>response = restTemplate.exchange(
                 url,
@@ -51,19 +48,12 @@ private NewsService newsService;
                 httpEntity,
                 String.class
         );
-        List<News> newsList = newsService.transfer(response);
+        List<News> newsList = newsService.getNewsList(response);
+
+        newsService.saveNews(response);
 
         return newsList;
-
-
-
-
-
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        Map<String,String> map = objectMapper.readValue(result,Map.class);
-
-
-
     }
+
+
 }

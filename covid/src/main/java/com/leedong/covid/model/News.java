@@ -1,29 +1,22 @@
 package com.leedong.covid.model;
 
-import org.json.JSONArray;
-
-import java.util.List;
 
 public class News {
 
     private String title;
-
     private String content;
-
     private String connectionUrl;
+    private String[] dataList;
+    private String createdDate;
+    private String modifiedDate;
 
-
-    public JSONArray getDataList() {
+    public String[] getDataList() {
         return dataList;
     }
 
-    public void setDataList(JSONArray dataList) {
+    public void setDataList(String[] dataList) {
         this.dataList = dataList;
     }
-
-    private JSONArray dataList;
-
-    private String createdDate;
 
     public String getCreatedDate() {
         return createdDate;
@@ -41,10 +34,6 @@ public class News {
         this.modifiedDate = modifiedDate;
     }
 
-    //    @JsonProperty("修改日期")
-    private String modifiedDate;
-
-
     public String getContent() {
         return content;
     }
@@ -60,7 +49,6 @@ public class News {
     public void setConnectionUrl(String connectionUrl) {
         this.connectionUrl = connectionUrl;
     }
-
 
 
     public String getTitle() {

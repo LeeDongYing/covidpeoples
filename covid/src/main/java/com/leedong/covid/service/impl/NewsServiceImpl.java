@@ -23,7 +23,29 @@ public class NewsServiceImpl implements NewsService {
     private ObjectMapper objectMapper;
 
     @Override
-    public List<News> transfer(ResponseEntity<String> response) throws JsonProcessingException {
+    public List<News> getNewsList(ResponseEntity<String> response) throws JsonProcessingException {
+        return transfer(response);
+    }
+
+    @Override
+    public void saveNews(ResponseEntity<String> response) throws JsonProcessingException {
+        List<News> newsList =  transfer(response);
+        List<News> nList = new ArrayList<>();
+        for (int i = 0;i<newsList.size();i++){
+            News news = newsList.get(i);
+            if (newsDao.getNewsByUrl(news) != true){
+                nList.add(newsList.get(i));
+            }else{
+                continue;
+            }
+        }
+
+        newsDao.saveNews(nList);
+    }
+
+
+
+    private List<News> transfer(ResponseEntity<String> response)throws JsonProcessingException{
         String result = response.getBody().toString();
 
         List<News> newsList = new ArrayList<>();
@@ -39,16 +61,18 @@ public class NewsServiceImpl implements NewsService {
 
             news.setTitle(jsonObject.getString("標題"));
             news.setContent(jsonObject.getString("內容"));
-            news.setDataList(jsonObject.getJSONArray("附加檔案"));
+
+            String[] jArray = objectMapper.readValue(jsonObject.getJSONArray("附加檔案").toString(),String[].class);
+            news.setDataList(jArray);
+
             news.setConnectionUrl(jsonObject.getString("連結網址"));
             news.setCreatedDate(jsonObject.getString("發布日期"));
             news.setModifiedDate(jsonObject.getString("修改日期"));
+
             newsList.add(news);
+
 //            json += objectMapper.writeValueAsString(news);
-
         }
-
-
         return newsList;
     }
 }
