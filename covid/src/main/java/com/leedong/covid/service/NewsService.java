@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface NewsService {
-    void saveNews(ResponseEntity<String> response)throws JsonProcessingException;
+    void createNews(ResponseEntity<String> response)throws JsonProcessingException;
 
     List<News> getNewsList(ResponseEntity<String> response)throws JsonProcessingException ;
 

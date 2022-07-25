@@ -1,6 +1,7 @@
 package com.leedong.covid.dao.impl;
 
 import com.leedong.covid.dao.NewsDao;
+import com.leedong.covid.model.Data;
 import com.leedong.covid.model.News;
 import com.leedong.covid.rowmapper.NewsRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,28 @@ public class NewsDaoImpl implements NewsDao {
 
 
     @Override
-    public void saveNews(List<News> newsList) {
+    public void createNews(List<News> newsList) {
         String sql = "INSERT INTO news (title, content, connectUrl, created_date, modified_date)\n" +
                 "VALUES (:title , :content ,:connectUrl  ,:createdDate ,:modifiedDate)";
 
-        String sqlDataList = "INSERT INTO datalist (data) VALUE (:dataList)";
+        String sqlDataList = "INSERT INTO data (explanation, name, connection, connectionUrl) \n" +
+                "VALUES (:explanation ,:name , :connection ,:connectionUrl)";
 
         MapSqlParameterSource[] mapSqlParameterSources = new MapSqlParameterSource[newsList.size()];
+
          for (int i = 0 ;i < newsList.size() ; i++){
              News news = newsList.get(i);
+
+             for (int j = 0; j<news.getDataList().size();j++) {
+                 Map<String, Object> map = new HashMap<>();
+                 Data data = news.getDataList().get(j);
+                 map.put("explanation", data.getExplanation());
+                 map.put("name", data.getName());
+                 map.put("connection", data.getConnection());
+                 map.put("connectionUrl", news.getConnectionUrl());
+
+                 namedParameterJdbcTemplate.update(sqlDataList,map);
+             }
 
              mapSqlParameterSources[i] = new MapSqlParameterSource();
              mapSqlParameterSources[i].addValue("title",news.getTitle());
@@ -36,9 +50,8 @@ public class NewsDaoImpl implements NewsDao {
              mapSqlParameterSources[i].addValue("createdDate",news.getCreatedDate());
              mapSqlParameterSources[i].addValue("modifiedDate",news.getModifiedDate());
 
-             mapSqlParameterSources[i].addValue("dataList", news.getDataList().toString());
          }
-        namedParameterJdbcTemplate.batchUpdate(sql,mapSqlParameterSources);
+         namedParameterJdbcTemplate.batchUpdate(sql,mapSqlParameterSources);
     }
 
     @Override

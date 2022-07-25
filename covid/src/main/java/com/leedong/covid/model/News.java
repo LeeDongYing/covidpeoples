@@ -1,20 +1,22 @@
 package com.leedong.covid.model;
 
 
+import java.util.List;
+
 public class News {
 
     private String title;
     private String content;
     private String connectionUrl;
-    private String[] dataList;
+    private List<Data> dataList;
     private String createdDate;
     private String modifiedDate;
 
-    public String[] getDataList() {
+    public List<Data> getDataList() {
         return dataList;
     }
 
-    public void setDataList(String[] dataList) {
+    public void setDataList(List<Data> dataList) {
         this.dataList = dataList;
     }
 

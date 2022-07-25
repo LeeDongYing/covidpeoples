@@ -6,6 +6,7 @@ import com.leedong.covid.model.News;
 import com.leedong.covid.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +25,7 @@ private NewsService newsService;
 
 
     @GetMapping("/news")
+    @Validated
     public List<News> getAllNews() throws JsonProcessingException {
         String url = "https://www.hpa.gov.tw/wf/newsapi.ashx?fbclid=IwAR11w4I_brMYrgl7iAummGlQV8hKxvdf3NWmUWlp0Cadyy2DHAnPaST6DxM";
 
@@ -39,7 +41,7 @@ private NewsService newsService;
         //keyword：標題關鍵字
         //startdate：發布日期起始時間
         //enddate：發布日期結束時間
-        url +="&startdate=2022/07/10";
+        url +="&startdate=2022/01/01";
 
 
         ResponseEntity<String>response = restTemplate.exchange(
@@ -50,7 +52,7 @@ private NewsService newsService;
         );
         List<News> newsList = newsService.getNewsList(response);
 
-        newsService.saveNews(response);
+        newsService.createNews(response);
 
         return newsList;
     }

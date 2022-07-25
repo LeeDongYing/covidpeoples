@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NewsDao {
 
-    void saveNews(List<News> newsList);
+    void createNews(List<News> newsList);
 
     boolean getNewsByUrl(News news);
 

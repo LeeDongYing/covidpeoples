@@ -1,9 +1,22 @@
 package com.leedong.covid.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 public class Data {
     private String explanation;
     private String name;
     private String connection;
+    @JsonIgnore
+    private String connectionUrl;
+
+    public String getConnectionUrl() {
+        return connectionUrl;
+    }
+
+    public void setConnectionUrl(String connectionUrl) {
+        this.connectionUrl = connectionUrl;
+    }
 
     public String getExplanation() {
         return explanation;

@@ -3,6 +3,7 @@ package com.leedong.covid.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leedong.covid.dao.NewsDao;
+import com.leedong.covid.model.Data;
 import com.leedong.covid.model.News;
 import com.leedong.covid.service.NewsService;
 import org.json.JSONArray;
@@ -28,7 +29,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void saveNews(ResponseEntity<String> response) throws JsonProcessingException {
+    public void createNews(ResponseEntity<String> response) throws JsonProcessingException {
         List<News> newsList =  transfer(response);
         List<News> nList = new ArrayList<>();
         for (int i = 0;i<newsList.size();i++){
@@ -39,8 +40,7 @@ public class NewsServiceImpl implements NewsService {
                 continue;
             }
         }
-
-        newsDao.saveNews(nList);
+        newsDao.createNews(nList);
     }
 
 
@@ -62,8 +62,20 @@ public class NewsServiceImpl implements NewsService {
             news.setTitle(jsonObject.getString("標題"));
             news.setContent(jsonObject.getString("內容"));
 
-            String[] jArray = objectMapper.readValue(jsonObject.getJSONArray("附加檔案").toString(),String[].class);
-            news.setDataList(jArray);
+//            String[] jArray = objectMapper.readValue(jsonObject.getJSONArray("附加檔案").toString(),String[].class);
+//            news.setDataList(jArray);
+            JSONArray jArray = jsonObject.getJSONArray("附加檔案");
+            List<Data> dataList = new ArrayList<>();
+            for (int j = 0 ; j< jArray.length() ;j++){
+                JSONObject jObject = jArray.getJSONObject(j);
+                Data data = new Data();
+                data.setExplanation(jObject.getString("檔案說明"));
+                data.setName(jObject.getString("檔案名稱"));
+                data.setConnection(jObject.getString("連結位置"));
+                dataList.add(data);
+            }
+            news.setDataList(dataList);
+
 
             news.setConnectionUrl(jsonObject.getString("連結網址"));
             news.setCreatedDate(jsonObject.getString("發布日期"));
