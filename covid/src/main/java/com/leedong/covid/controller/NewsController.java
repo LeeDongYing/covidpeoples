@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ private NewsService newsService;
 
     @GetMapping("/news")
     @Validated
-    public List<News> getAllNews() throws JsonProcessingException {
+    public List<News> getAllNews() throws JsonProcessingException, ParseException {
         String url = "https://www.hpa.gov.tw/wf/newsapi.ashx?fbclid=IwAR11w4I_brMYrgl7iAummGlQV8hKxvdf3NWmUWlp0Cadyy2DHAnPaST6DxM";
 
         RestTemplate restTemplate =new RestTemplate();
@@ -41,7 +42,7 @@ private NewsService newsService;
         //keyword：標題關鍵字
         //startdate：發布日期起始時間
         //enddate：發布日期結束時間
-        url +="&startdate=2022/01/01";
+        url +="&startdate=2022/07/01";
 
 
         ResponseEntity<String>response = restTemplate.exchange(

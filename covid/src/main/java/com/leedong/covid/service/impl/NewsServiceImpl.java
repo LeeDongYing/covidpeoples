@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -24,12 +28,12 @@ public class NewsServiceImpl implements NewsService {
     private ObjectMapper objectMapper;
 
     @Override
-    public List<News> getNewsList(ResponseEntity<String> response) throws JsonProcessingException {
+    public List<News> getNewsList(ResponseEntity<String> response) throws JsonProcessingException, ParseException {
         return transfer(response);
     }
 
     @Override
-    public void createNews(ResponseEntity<String> response) throws JsonProcessingException {
+    public void createNews(ResponseEntity<String> response) throws JsonProcessingException, ParseException {
         List<News> newsList =  transfer(response);
         List<News> nList = new ArrayList<>();
         for (int i = 0;i<newsList.size();i++){
@@ -45,7 +49,7 @@ public class NewsServiceImpl implements NewsService {
 
 
 
-    private List<News> transfer(ResponseEntity<String> response)throws JsonProcessingException{
+    private List<News> transfer(ResponseEntity<String> response) throws JsonProcessingException, ParseException {
         String result = response.getBody().toString();
 
         List<News> newsList = new ArrayList<>();
@@ -76,10 +80,15 @@ public class NewsServiceImpl implements NewsService {
             }
             news.setDataList(dataList);
 
-
             news.setConnectionUrl(jsonObject.getString("連結網址"));
-            news.setCreatedDate(jsonObject.getString("發布日期"));
-            news.setModifiedDate(jsonObject.getString("修改日期"));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date cDate = sdf.parse(jsonObject.getString("發布日期"));
+            news.setCreatedDate(cDate);
+
+            Date mDate = sdf.parse(jsonObject.getString("修改日期"));
+            news.setModifiedDate(mDate);
 
             newsList.add(news);
 

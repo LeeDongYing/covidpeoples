@@ -1,6 +1,7 @@
 package com.leedong.covid.model;
 
 
+import java.util.Date;
 import java.util.List;
 
 public class News {
@@ -9,8 +10,8 @@ public class News {
     private String content;
     private String connectionUrl;
     private List<Data> dataList;
-    private String createdDate;
-    private String modifiedDate;
+    private Date createdDate;
+    private Date modifiedDate;
 
     public List<Data> getDataList() {
         return dataList;
@@ -20,19 +21,19 @@ public class News {
         this.dataList = dataList;
     }
 
-    public String getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public String getModifiedDate() {
+    public Date getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(String modifiedDate) {
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
